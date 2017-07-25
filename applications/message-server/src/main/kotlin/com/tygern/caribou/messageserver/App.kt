@@ -6,9 +6,8 @@ import org.eclipse.jetty.server.handler.HandlerList
 import org.slf4j.LoggerFactory
 import java.util.TimeZone
 
-class App {
+class App(val port: Int) {
     private val logger = LoggerFactory.getLogger(javaClass)
-    private val port = 8081
 
     private val server = Server(port).apply {
         handler = handlerList()
@@ -22,9 +21,11 @@ class App {
     }
 
     fun start() {
-        logger.info("App started on port $port.")
+        logger.info("App started at http://localhost:$port.")
         server.start()
     }
+
+    fun stop() = shutdownServer().invoke()
 
     private fun shutdownServer() = {
         try {
@@ -44,5 +45,5 @@ class App {
 
 fun main(args: Array<String>) {
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    App().start()
+    App(8081).start()
 }

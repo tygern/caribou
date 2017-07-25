@@ -1,2 +1,3 @@
 include ":applications:message-server",
-        ":components:messages"
+        ":components:messages",
+        ":components:rest-support"
