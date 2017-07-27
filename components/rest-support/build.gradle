@@ -3,4 +3,7 @@ apply from: "$rootProject.rootDir/kotlin.gradle"
 dependencies {
     compile "org.apache.httpcomponents:httpcore:4.3"
     compile "org.apache.httpcomponents:httpclient:4.3"
+
+    compile "org.eclipse.jetty:jetty-server:$jettyVersion"
+    compile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
 }

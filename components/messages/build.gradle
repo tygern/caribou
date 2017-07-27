@@ -1,6 +1,10 @@
 apply from: "$rootProject.rootDir/kotlin.gradle"
 
 dependencies {
-    compile "org.eclipse.jetty:jetty-server:9.3.0.M2"
-    compile "org.eclipse.jetty:jetty-servlet:9.3.0.M2"
+    compile project(":components:rest-support")
+
+    compile "org.eclipse.jetty:jetty-server:$jettyVersion"
+    compile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
+
+    compile "com.fasterxml.jackson.core:jackson-databind:2.8.4"
 }

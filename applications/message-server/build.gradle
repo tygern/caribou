@@ -1,10 +1,15 @@
 apply from: "$rootProject.rootDir/kotlin.gradle"
 
-version "1.0-SNAPSHOT"
+apply plugin: "application"
+
+def appClass = "com.tygern.caribou.messageserver.AppKt"
+
+mainClassName = appClass
+version "0.0.1-SNAPSHOT"
 
 jar {
     manifest {
-        attributes "Main-Class": "com.tygern.caribou.messageserver.AppKt"
+        attributes "Main-Class": appClass
     }
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
@@ -13,11 +18,17 @@ jar {
 
 dependencies {
     compile project(":components:messages")
+    compile project(":components:rest-support")
 
-    compile "org.eclipse.jetty:jetty-server:9.3.0.M2"
-    compile "org.eclipse.jetty:jetty-servlet:9.3.0.M2"
+    compile "org.eclipse.jetty:jetty-server:$jettyVersion"
+    compile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
 
     compile "javax.servlet:javax.servlet-api:3.1.0"
 
-    testCompile project(":components:rest-support")
+    compile "com.fasterxml.jackson.core:jackson-core:2.8.4"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.8.4"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.8.4"
+
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.4"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4"
 }

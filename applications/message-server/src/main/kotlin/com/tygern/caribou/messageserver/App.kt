@@ -1,13 +1,19 @@
 package com.tygern.caribou.messageserver
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.tygern.caribou.messages.MessageController
+import com.tygern.caribou.messages.MessageRepository
+import com.tygern.caribou.restsupport.DefaultController
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.HandlerList
 import org.slf4j.LoggerFactory
 import java.util.TimeZone
 
 class App(val port: Int) {
-    private val logger = LoggerFactory.getLogger(javaClass)
+    val logger = LoggerFactory.getLogger(javaClass)
+    val mapper: ObjectMapper = ObjectMapper().registerKotlinModule().registerModule(JavaTimeModule())
 
     private val server = Server(port).apply {
         handler = handlerList()
@@ -39,7 +45,8 @@ class App(val port: Int) {
     }
 
     private fun handlerList() = HandlerList().apply {
-        addHandler(MessageController())
+        addHandler(MessageController(mapper, MessageRepository()))
+        addHandler(DefaultController())
     }
 }
 

@@ -9,18 +9,12 @@ import org.assertj.core.api.Assertions.assertThat
 class AppTest : Test({
 
     val app = App(8181)
-
-    before {
-        app.start()
-    }
-
-    after {
-        app.stop()
-    }
+    before { app.start() }
+    after { app.stop() }
 
     test {
         val response = RestClient().get("http://localhost:8181")
 
-        assertThat(response).isEqualTo("Hello")
+        assertThat(response).isEqualTo("Caribou")
     }
 })
