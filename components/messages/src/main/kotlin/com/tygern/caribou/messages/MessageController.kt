@@ -3,7 +3,6 @@ package com.tygern.caribou.messages
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.tygern.caribou.restsupport.BaseController
 import org.eclipse.jetty.server.Request
-import org.eclipse.jetty.server.handler.AbstractHandler
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -24,6 +23,14 @@ class MessageController(
             val list = messageRepository.list()
 
             mapper.writeValue(httpServletResponse.outputStream, list)
+        }
+
+        get("/messages/([^/]+)/?", request, httpServletResponse) { pathVariables ->
+            val id = pathVariables.first()
+
+            val message = messageRepository.find(id)
+
+            mapper.writeValue(httpServletResponse.outputStream, message)
         }
     }
 }

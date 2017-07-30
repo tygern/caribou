@@ -43,6 +43,18 @@ class MessagesTest : Test({
 
         assertThat(messageList).contains(messageInList)
     }
+
+    test("read") {
+        val messageInList = createMessage(mapper)
+
+
+        val response = RestClient().get("http://localhost:8181/messages/" + messageInList.id)
+
+
+        val message = mapper.readValue(response, Message::class.java)
+
+        assertThat(message).isEqualTo(messageInList)
+    }
 })
 
 fun createMessage(mapper: ObjectMapper): Message {

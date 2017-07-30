@@ -7,13 +7,13 @@ import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
 abstract class BaseController : AbstractHandler() {
-    fun post(uri: String, request: Request, httpServletResponse: HttpServletResponse, block: () -> Unit) {
+    fun post(uri: String, request: Request, httpServletResponse: HttpServletResponse, block: (List<String>) -> Unit) {
         if (request.method == HttpMethod.POST.toString()) {
-            if (uri == request.requestURI) {
+            uri.toRegex().matchEntire(request.pathInfo)?.let {
                 httpServletResponse.contentType = "application/json"
                 try {
                     httpServletResponse.status = HttpServletResponse.SC_CREATED
-                    block()
+                    block(it.groupValues.drop(1))
                 } catch (e: SQLException) {
                     httpServletResponse.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
                 }
@@ -22,13 +22,13 @@ abstract class BaseController : AbstractHandler() {
         }
     }
 
-    fun get(uri: String, request: Request, httpServletResponse: HttpServletResponse, block: () -> Unit) {
+    fun get(uri: String, request: Request, httpServletResponse: HttpServletResponse, block: (List<String>) -> Unit) {
         if (request.method == HttpMethod.GET.toString()) {
-            if (uri == request.requestURI) {
+            uri.toRegex().matchEntire(request.pathInfo)?.let {
                 httpServletResponse.contentType = "application/json"
                 try {
                     httpServletResponse.status = HttpServletResponse.SC_OK
-                    block()
+                    block(it.groupValues.drop(1))
                 } catch (e: SQLException) {
                     httpServletResponse.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
                 }
