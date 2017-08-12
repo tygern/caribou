@@ -1,0 +1,12 @@
+apply from: "$rootProject.rootDir/kotlin.gradle"
+
+dependencies {
+    compile project(":applications:list-server")
+    compile project(":applications:message-server")
+
+    testCompile project(":components:test-support")
+}
+
+test.environment([
+    MESSAGE_SERVER_URL: "http://localhost:8181"
+])

@@ -40,9 +40,4 @@ class ListRepository(private val messageClient: MessageClient) {
     )
 
     private fun generateId() = UUID.randomUUID().toString()
-
-
 }
-
-class MessageNotFoundException : Throwable()
-class ListNotFoundException : Throwable()

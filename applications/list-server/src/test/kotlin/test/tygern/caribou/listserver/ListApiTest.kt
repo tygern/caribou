@@ -1,11 +1,11 @@
 package test.tygern.caribou.listserver
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.tygern.caribou.lists.Message
 import com.tygern.caribou.lists.MessageList
 import com.tygern.caribou.listserver.ListServer
 import com.tygern.caribou.restsupport.Response
 import com.tygern.caribou.restsupport.RestClient
+import com.tygern.caribou.restsupport.objectMapper
 import io.damo.aspen.Test
 import io.tygern.caribou.testsupport.assertError
 import io.tygern.caribou.testsupport.assertSuccess
@@ -14,12 +14,12 @@ import org.assertj.core.api.Assertions.assertThat
 import java.lang.RuntimeException
 
 private val listServerUrl = "http://localhost:8182"
+private val mapper = objectMapper()
 
 class ListApiTest : Test({
 
     val listServer = ListServer(8182)
     val fakeMessageServer = FakeMessageServer(8181)
-    val mapper = listServer.mapper
 
     before {
         listServer.start()
@@ -47,7 +47,7 @@ class ListApiTest : Test({
     }
 
     test("find") {
-        val messageList = createList(mapper)
+        val messageList = createList()
 
 
         val response = RestClient().get("$listServerUrl/lists/${messageList.id}")
@@ -71,7 +71,7 @@ class ListApiTest : Test({
     }
 
     test("add") {
-        val messageList = createList(mapper)
+        val messageList = createList()
 
 
         val response = RestClient().post("$listServerUrl/lists/${messageList.id}/add/i-exist")
@@ -93,7 +93,7 @@ class ListApiTest : Test({
     }
 })
 
-fun createList(mapper: ObjectMapper): MessageList {
+fun createList(): MessageList {
     val body = mapper.writeValueAsString(MessageList(title = "What to do"))
 
 

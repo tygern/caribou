@@ -1,5 +1,8 @@
 package com.tygern.caribou.restsupport
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.eclipse.jetty.server.Server
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -36,3 +39,5 @@ abstract class BaseApp(val port: Int) {
         }
     }
 }
+
+fun objectMapper(): ObjectMapper = ObjectMapper().registerKotlinModule().registerModule(JavaTimeModule())

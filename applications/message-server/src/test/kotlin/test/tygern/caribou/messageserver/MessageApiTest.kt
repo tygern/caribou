@@ -1,10 +1,10 @@
 package test.tygern.caribou.messageserver
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.tygern.caribou.messages.Message
 import com.tygern.caribou.messageserver.MessageServer
 import com.tygern.caribou.restsupport.Response
 import com.tygern.caribou.restsupport.RestClient
+import com.tygern.caribou.restsupport.objectMapper
 import io.damo.aspen.Test
 import io.tygern.caribou.testsupport.assertError
 import io.tygern.caribou.testsupport.assertSuccess
@@ -12,11 +12,11 @@ import org.assertj.core.api.Assertions.assertThat
 import java.lang.RuntimeException
 
 private val messageServerUrl = "http://localhost:8181"
+private val mapper = objectMapper()
 
 class MessageApiTest : Test({
 
     val messageServer = MessageServer(8181)
-    val mapper = messageServer.mapper
 
     before { messageServer.start() }
     after { messageServer.stop() }
@@ -37,7 +37,7 @@ class MessageApiTest : Test({
     }
 
     test("list") {
-        val messageInList = createMessage(mapper)
+        val messageInList = createMessage()
 
 
         val response = RestClient().get("$messageServerUrl/messages")
@@ -52,7 +52,7 @@ class MessageApiTest : Test({
     }
 
     test("read") {
-        val message = createMessage(mapper)
+        val message = createMessage()
 
 
         val response = RestClient().get("$messageServerUrl/messages/${message.id}")
@@ -75,7 +75,7 @@ class MessageApiTest : Test({
     }
 
     test("delete") {
-        val message = createMessage(mapper)
+        val message = createMessage()
 
 
         val response = RestClient().delete("$messageServerUrl/messages/${message.id}")
@@ -86,7 +86,7 @@ class MessageApiTest : Test({
     }
 
     test("update") {
-        val message = createMessage(mapper)
+        val message = createMessage()
         val body = mapper.writeValueAsString(Message(value = "hola", id = "could be nonsense"))
 
 
@@ -114,14 +114,14 @@ class MessageApiTest : Test({
     }
 })
 
-fun createMessage(mapper: ObjectMapper): Message {
+fun createMessage(): Message {
     val body = mapper.writeValueAsString(Message(value = "hey"))
 
 
     val response = RestClient().post("$messageServerUrl/messages", body)
 
 
-    return when(response) {
+    return when (response) {
         is Response.Success -> mapper.readValue(response.body, Message::class.java)
         is Response.Error -> throw RuntimeException("Message creation failed")
     }

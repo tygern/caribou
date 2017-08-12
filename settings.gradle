@@ -4,5 +4,6 @@ include(
     ":components:lists",
     ":components:messages",
     ":components:rest-support",
-    ":components:test-support"
+    ":components:test-support",
+    ":integration-test"
 )
