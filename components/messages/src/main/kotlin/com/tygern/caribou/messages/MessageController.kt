@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class MessageController(
-    val mapper : ObjectMapper,
+    val mapper: ObjectMapper,
     val messageRepository: MessageRepository
 ) : BaseController() {
     override fun handle(s: String, request: Request, httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse) {
@@ -30,7 +30,11 @@ class MessageController(
 
             val message = messageRepository.find(id)
 
-            mapper.writeValue(httpServletResponse.outputStream, message)
+            if (message == null) {
+                httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "Message not found")
+            } else {
+                mapper.writeValue(httpServletResponse.outputStream, message)
+            }
         }
     }
 }

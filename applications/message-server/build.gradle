@@ -31,4 +31,6 @@ dependencies {
 
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.4"
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4"
+
+    testCompile project(":components:test-support")
 }

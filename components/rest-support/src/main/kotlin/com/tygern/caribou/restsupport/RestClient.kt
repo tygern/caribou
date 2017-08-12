@@ -5,7 +5,6 @@ import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.entity.StringEntity
-import org.apache.http.impl.client.BasicResponseHandler
 import org.apache.http.impl.client.HttpClients
 import org.apache.http.message.BasicNameValuePair
 
@@ -21,8 +20,8 @@ class RestClient {
         }
     )
 
-    private fun execute(request: HttpUriRequest): String {
-        return HttpClients.createDefault().execute(request, BasicResponseHandler())
+    private fun execute(request: HttpUriRequest): Response {
+        return HttpClients.createDefault().execute(request, HttpResponseHandler())
     }
 
     private fun uriWithParams(endpoint: String, pairs: Array<out BasicNameValuePair>) =

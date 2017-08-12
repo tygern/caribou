@@ -3,6 +3,7 @@ package test.tygern.caribou.messageserver
 import com.tygern.caribou.messageserver.App
 import com.tygern.caribou.restsupport.RestClient
 import io.damo.aspen.Test
+import io.tygern.caribou.testsupport.assertSuccess
 
 import org.assertj.core.api.Assertions.assertThat
 
@@ -15,6 +16,8 @@ class AppTest : Test({
     test {
         val response = RestClient().get("http://localhost:8181")
 
-        assertThat(response).isEqualTo("Caribou")
+        assertSuccess(response, statusCode = 200) {
+            assertThat(it.body).isEqualTo("Caribou")
+        }
     }
 })
