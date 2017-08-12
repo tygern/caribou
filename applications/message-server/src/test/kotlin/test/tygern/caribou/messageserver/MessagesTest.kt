@@ -84,6 +84,34 @@ class MessagesTest : Test({
         assertSuccess(response, statusCode = 204)
         assertError(RestClient().get("$messageServerUrl/messages/${message.id}"), statusCode = 404)
     }
+
+    test("update") {
+        val message = createMessage(mapper)
+        val body = mapper.writeValueAsString(Message(value = "hola", id = "could be nonsense"))
+
+
+        val response = RestClient().put("$messageServerUrl/messages/${message.id}", body)
+
+
+        assertSuccess(response, statusCode = 200) {
+            val createdMessage = mapper.readValue(it.body, Message::class.java)
+
+            assertThat(createdMessage.value).isEqualTo("hola")
+            assertThat(createdMessage.id).isEqualTo(message.id)
+        }
+    }
+
+    test("update not found") {
+        val body = mapper.writeValueAsString(Message(value = "hola", id = "could be nonsense"))
+
+
+        val response = RestClient().put("$messageServerUrl/messages/pickles", body)
+
+
+        assertError(response, statusCode = 404) {
+            assertThat(it.message).isEqualTo("Message not found")
+        }
+    }
 })
 
 fun createMessage(mapper: ObjectMapper): Message {

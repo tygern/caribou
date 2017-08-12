@@ -37,6 +37,16 @@ abstract class BaseController : AbstractHandler() {
             statusCode = HttpServletResponse.SC_NO_CONTENT
         )
 
+    fun put(uri: String, request: Request, httpServletResponse: HttpServletResponse, action: (List<String>) -> Unit) =
+        handleRequest(
+            request = request,
+            uri = uri,
+            response = httpServletResponse,
+            action = action,
+            method = HttpMethod.PUT,
+            statusCode = HttpServletResponse.SC_OK
+        )
+
     private fun handleRequest(
         request: Request,
         uri: String,

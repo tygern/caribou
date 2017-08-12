@@ -42,5 +42,18 @@ class MessageController(
 
             messageRepository.delete(id)
         }
+
+        put("/messages/([^/]+)/?", request, httpServletResponse) { pathVariables ->
+            val id = pathVariables.first()
+            val message = mapper.readValue(request.reader, Message::class.java)
+
+            val updatedMessage = messageRepository.update(id, message)
+
+            if (updatedMessage == null) {
+                httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "Message not found")
+            } else {
+                mapper.writeValue(httpServletResponse.outputStream, updatedMessage)
+            }
+        }
     }
 }
