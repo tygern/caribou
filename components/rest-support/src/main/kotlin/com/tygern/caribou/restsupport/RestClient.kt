@@ -11,7 +11,7 @@ class RestClient {
         HttpGet(uriWithParams(endpoint, pairs))
     )
 
-    fun post(endpoint: String, data: String) = execute(
+    fun post(endpoint: String, data: String = "") = execute(
         HttpPost(endpoint).apply {
             addHeader("Content-type", "application/json")
             entity = StringEntity(data)

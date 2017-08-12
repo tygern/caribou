@@ -2,7 +2,7 @@ package test.tygern.caribou.messageserver
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.tygern.caribou.messages.Message
-import com.tygern.caribou.messageserver.App
+import com.tygern.caribou.messageserver.MessageServer
 import com.tygern.caribou.restsupport.Response
 import com.tygern.caribou.restsupport.RestClient
 import io.damo.aspen.Test
@@ -13,13 +13,13 @@ import java.lang.RuntimeException
 
 private val messageServerUrl = "http://localhost:8181"
 
-class MessagesTest : Test({
+class MessageApiTest : Test({
 
-    val app = App(8181)
-    val mapper = app.mapper
+    val messageServer = MessageServer(8181)
+    val mapper = messageServer.mapper
 
-    before { app.start() }
-    after { app.stop() }
+    before { messageServer.start() }
+    after { messageServer.stop() }
 
     test("create") {
         val body = mapper.writeValueAsString(Message(value = "hey"))

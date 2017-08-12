@@ -1,17 +1,17 @@
 package test.tygern.caribou.messageserver
 
-import com.tygern.caribou.messageserver.App
+import com.tygern.caribou.messageserver.MessageServer
 import com.tygern.caribou.restsupport.RestClient
 import io.damo.aspen.Test
 import io.tygern.caribou.testsupport.assertSuccess
 
 import org.assertj.core.api.Assertions.assertThat
 
-class AppTest : Test({
+class MessageServerTest : Test({
 
-    val app = App(8181)
-    before { app.start() }
-    after { app.stop() }
+    val messageServer = MessageServer(8181)
+    before { messageServer.start() }
+    after { messageServer.stop() }
 
     test {
         val response = RestClient().get("http://localhost:8181")

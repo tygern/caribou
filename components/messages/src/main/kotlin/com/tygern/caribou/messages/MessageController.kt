@@ -27,7 +27,6 @@ class MessageController(
 
         get("/messages/([^/]+)/?", request, httpServletResponse) { pathVariables ->
             val id = pathVariables.first()
-
             val message = messageRepository.find(id)
 
             if (message == null) {

@@ -8,7 +8,9 @@ fun assertSuccess(response: Response, statusCode: Int, assertions: ((Response.Su
     when (response) {
         is Response.Error -> fail("Request failed unexpectedly: $response")
         is Response.Success -> {
-            assertThat(response.statusCode).isEqualTo(statusCode)
+            assertThat(response.statusCode)
+                .withFailMessage("Expected status $statusCode from: $response")
+                .isEqualTo(statusCode)
             assertions?.invoke(response)
         }
     }
@@ -17,7 +19,9 @@ fun assertError(response: Response, statusCode: Int, assertions: ((Response.Erro
     when (response) {
         is Response.Success -> fail("Request succeeded unexpectedly: $response")
         is Response.Error -> {
-            assertThat(response.statusCode).isEqualTo(statusCode)
+            assertThat(response.statusCode)
+                .withFailMessage("Expected status $statusCode from: $response")
+                .isEqualTo(statusCode)
             assertions?.invoke(response)
         }
     }

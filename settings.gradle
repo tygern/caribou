@@ -1,4 +1,8 @@
-include ":applications:message-server",
-        ":components:messages",
-        ":components:rest-support",
-        ":components:test-support"
+include(
+    ":applications:list-server",
+    ":applications:message-server",
+    ":components:lists",
+    ":components:messages",
+    ":components:rest-support",
+    ":components:test-support"
+)

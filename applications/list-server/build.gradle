@@ -2,7 +2,7 @@ apply from: "$rootProject.rootDir/kotlin.gradle"
 
 apply plugin: "application"
 
-def appClass = "com.tygern.caribou.messageserver.MessageServerKt"
+def appClass = "com.tygern.caribou.listserver.ListServerKt"
 
 mainClassName = appClass
 version "0.0.1-SNAPSHOT"
@@ -17,7 +17,7 @@ jar {
 }
 
 dependencies {
-    compile project(":components:messages")
+    compile project(":components:lists")
     compile project(":components:rest-support")
 
     compile "org.eclipse.jetty:jetty-server:$jettyVersion"
@@ -34,3 +34,11 @@ dependencies {
 
     testCompile project(":components:test-support")
 }
+
+run.environment([
+    MESSAGE_SERVER_URL: "http://localhost:8081"
+])
+
+test.environment([
+    MESSAGE_SERVER_URL: "http://localhost:8181"
+])
