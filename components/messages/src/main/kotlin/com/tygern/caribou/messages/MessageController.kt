@@ -36,5 +36,11 @@ class MessageController(
                 mapper.writeValue(httpServletResponse.outputStream, message)
             }
         }
+
+        delete("/messages/([^/]+)/?", request, httpServletResponse) { pathVariables ->
+            val id = pathVariables.first()
+
+            messageRepository.delete(id)
+        }
     }
 }

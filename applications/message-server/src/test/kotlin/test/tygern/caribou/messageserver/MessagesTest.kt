@@ -11,6 +11,8 @@ import io.tygern.caribou.testsupport.assertSuccess
 import org.assertj.core.api.Assertions.assertThat
 import java.lang.RuntimeException
 
+private val messageServerUrl = "http://localhost:8181"
+
 class MessagesTest : Test({
 
     val app = App(8181)
@@ -23,7 +25,7 @@ class MessagesTest : Test({
         val body = mapper.writeValueAsString(Message(value = "hey"))
 
 
-        val response = RestClient().post("http://localhost:8181/messages", body)
+        val response = RestClient().post("$messageServerUrl/messages", body)
 
 
         assertSuccess(response, statusCode = 201) {
@@ -38,7 +40,7 @@ class MessagesTest : Test({
         val messageInList = createMessage(mapper)
 
 
-        val response = RestClient().get("http://localhost:8181/messages")
+        val response = RestClient().get("$messageServerUrl/messages")
 
 
         assertSuccess(response, statusCode = 200) {
@@ -50,26 +52,37 @@ class MessagesTest : Test({
     }
 
     test("read") {
-        val messageInList = createMessage(mapper)
+        val message = createMessage(mapper)
 
 
-        val response = RestClient().get("http://localhost:8181/messages/" + messageInList.id)
+        val response = RestClient().get("$messageServerUrl/messages/${message.id}")
 
 
         assertSuccess(response, statusCode = 200) {
-            val message = mapper.readValue(it.body, Message::class.java)
+            val readMessage = mapper.readValue(it.body, Message::class.java)
 
-            assertThat(message).isEqualTo(messageInList)
+            assertThat(readMessage).isEqualTo(readMessage)
         }
     }
 
     test("read not found") {
-        val response = RestClient().get("http://localhost:8181/messages/pickles")
+        val response = RestClient().get("$messageServerUrl/messages/pickles")
 
 
         assertError(response, statusCode = 404) {
             assertThat(it.message).isEqualTo("Message not found")
         }
+    }
+
+    test("delete") {
+        val message = createMessage(mapper)
+
+
+        val response = RestClient().delete("$messageServerUrl/messages/${message.id}")
+
+
+        assertSuccess(response, statusCode = 204)
+        assertError(RestClient().get("$messageServerUrl/messages/${message.id}"), statusCode = 404)
     }
 })
 
@@ -77,7 +90,7 @@ fun createMessage(mapper: ObjectMapper): Message {
     val body = mapper.writeValueAsString(Message(value = "hey"))
 
 
-    val response = RestClient().post("http://localhost:8181/messages", body)
+    val response = RestClient().post("$messageServerUrl/messages", body)
 
 
     return when(response) {

@@ -1,5 +1,6 @@
 package com.tygern.caribou.restsupport
 
+import org.apache.http.client.methods.HttpDelete
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpUriRequest
@@ -18,6 +19,10 @@ class RestClient {
             addHeader("Content-type", "application/json")
             entity = StringEntity(data)
         }
+    )
+
+    fun delete(endpoint: String, vararg pairs: BasicNameValuePair) = execute(
+        HttpDelete(uriWithParams(endpoint, pairs))
     )
 
     private fun execute(request: HttpUriRequest): Response {

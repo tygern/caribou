@@ -7,30 +7,52 @@ import java.sql.SQLException
 import javax.servlet.http.HttpServletResponse
 
 abstract class BaseController : AbstractHandler() {
-    fun post(uri: String, request: Request, httpServletResponse: HttpServletResponse, block: (List<String>) -> Unit) {
-        if (request.method == HttpMethod.POST.toString()) {
-            uri.toRegex().matchEntire(request.pathInfo)?.let {
-                httpServletResponse.contentType = "application/json"
-                try {
-                    httpServletResponse.status = HttpServletResponse.SC_CREATED
-                    block(it.groupValues.drop(1))
-                } catch (e: SQLException) {
-                    httpServletResponse.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-                }
-                request.isHandled = true
-            }
-        }
-    }
+    fun post(uri: String, request: Request, httpServletResponse: HttpServletResponse, action: (List<String>) -> Unit) =
+        handleRequest(
+            request = request,
+            uri = uri,
+            response = httpServletResponse,
+            action = action,
+            method = HttpMethod.POST,
+            statusCode = HttpServletResponse.SC_CREATED
+        )
 
-    fun get(uri: String, request: Request, httpServletResponse: HttpServletResponse, block: (List<String>) -> Unit) {
-        if (request.method == HttpMethod.GET.toString()) {
+    fun get(uri: String, request: Request, httpServletResponse: HttpServletResponse, action: (List<String>) -> Unit) =
+        handleRequest(
+            request = request,
+            uri = uri,
+            response = httpServletResponse,
+            action = action,
+            method = HttpMethod.GET,
+            statusCode = HttpServletResponse.SC_OK
+        )
+
+    fun delete(uri: String, request: Request, httpServletResponse: HttpServletResponse, action: (List<String>) -> Unit) =
+        handleRequest(
+            request = request,
+            uri = uri,
+            response = httpServletResponse,
+            action = action,
+            method = HttpMethod.DELETE,
+            statusCode = HttpServletResponse.SC_NO_CONTENT
+        )
+
+    private fun handleRequest(
+        request: Request,
+        uri: String,
+        response: HttpServletResponse,
+        action: (List<String>) -> Unit,
+        method: HttpMethod,
+        statusCode: Int
+    ) {
+        if (request.method == method.toString()) {
             uri.toRegex().matchEntire(request.pathInfo)?.let {
-                httpServletResponse.contentType = "application/json"
+                response.contentType = "application/json"
                 try {
-                    httpServletResponse.status = HttpServletResponse.SC_OK
-                    block(it.groupValues.drop(1))
+                    response.status = statusCode
+                    action(it.groupValues.drop(1))
                 } catch (e: SQLException) {
-                    httpServletResponse.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+                    response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
                 }
                 request.isHandled = true
             }
