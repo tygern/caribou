@@ -8,20 +8,20 @@ import javax.servlet.http.HttpServletResponse
 
 class ListController(
     val mapper: ObjectMapper,
-    val listRepository: ListRepository
+    val listService: ListService
 ) : BaseController() {
     override fun handle(s: String, request: Request, httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse) {
         post("/lists", request, httpServletResponse) {
             val list = mapper.readValue(request.reader, MessageList::class.java)
 
-            listRepository.create(list).also {
+            listService.create(list).also {
                 mapper.writeValue(httpServletResponse.outputStream, it)
             }
         }
 
         get("/lists/([^/]+)/?", request, httpServletResponse) { pathVariables ->
             val id = pathVariables.first()
-            val list = listRepository.find(id)
+            val list = listService.find(id)
 
             if (list == null) {
                 httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "List not found")
@@ -34,7 +34,7 @@ class ListController(
             val listId = pathVariables.first()
             val messageId = pathVariables[1]
 
-            val newList = listRepository.addMessage(listId, messageId)
+            val newList = listService.addMessage(listId, messageId)
 
             if (newList == null) {
                 httpServletResponse.status = HttpServletResponse.SC_BAD_REQUEST

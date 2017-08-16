@@ -1,73 +1,46 @@
 package test.tygern.caribou.lists
 
 import com.tygern.caribou.lists.ListRepository
-import com.tygern.caribou.lists.Message
-import com.tygern.caribou.lists.MessageList
+import com.tygern.caribou.lists.MessageListRecord
 import io.damo.aspen.Test
-import org.assertj.core.api.Assertions
+
 import org.assertj.core.api.Assertions.assertThat
 
-class ListRepositoryTest : Test({
-    val todo = MessageList(title = "Things to do")
-    val other = MessageList(title = "Other Stuff")
-
-    val messageClient = FakeMessageClient()
-
-    var repo = ListRepository(messageClient)
+class ListRepositoryTest: Test({
+    var repo = ListRepository()
 
     before {
-        repo = ListRepository(messageClient)
+        repo = ListRepository()
     }
 
-    test("unique id") {
-        val savedTodo = repo.create(todo)
-        val savedOther = repo.create(other)
-
-        assertThat(savedTodo.id).isNotNull()
-        assertThat(savedTodo.title).isEqualTo("Things to do")
-        assertThat(savedTodo.messages).isEmpty()
-        assertThat(savedTodo.id).isNotEqualTo(savedOther.id)
-    }
-
-    test("find") {
-        val savedTodo = repo.create(todo)
-
-        val messageList = repo.find(savedTodo.id!!)
-
-        assertThat(messageList).isEqualTo(savedTodo)
-    }
-
-    test("find not found") {
-        val messageList = repo.find("bananas")
-
-        assertThat(messageList).isNull()
-    }
-
-    test("addMessage") {
-        val savedTodo = repo.create(todo)
-
-        repo.addMessage(savedTodo.id!!, "i-exist")
-
-
-        val list = repo.find(savedTodo.id!!)!!
-
-        assertThat(list.messages).containsExactly(
-            Message("i-exist", "I exist")
+    test("return value") {
+        val list = MessageListRecord(
+            id = "the-id",
+            title = "Super list",
+            messageIds = listOf("123", "abc")
         )
+
+        assertThat(repo.save(list)).isEqualTo(list)
     }
 
-    test("addMessage no list") {
-        val result = repo.addMessage("pickels", "i-exist")
+    test("persistence") {
+        val list = MessageListRecord(
+            id = "the-id",
+            title = "Super list",
+            messageIds = listOf("123", "abc")
+        )
 
+        repo.save(list)
 
-        assertThat(result).isNull()
+        assertThat(repo.find(list.id!!)).isEqualTo(list)
     }
 
-    test("addMessage no message") {
-        val savedTodo = repo.create(todo)
+    test("adds an id") {
+        val list = MessageListRecord(
+            title = "Super list",
+            messageIds = listOf("123", "abc")
+        )
 
-        val result = repo.addMessage(savedTodo.id!!, "no-dice")
-
-        assertThat(result).isNull()
+        assertThat(repo.save(list).id).isNotNull()
     }
 })
