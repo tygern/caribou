@@ -3,7 +3,9 @@ package com.tygern.caribou.restsupport
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import org.eclipse.jetty.server.Handler
 import org.eclipse.jetty.server.Server
+import org.eclipse.jetty.server.handler.HandlerList
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -16,6 +18,10 @@ abstract class BaseApp(val port: Int) {
     }
 
     init {
+        server.handler = HandlerList().apply {
+            handlers = controllers().toTypedArray()
+        }
+
         Runtime
             .getRuntime()
             .addShutdownHook(Thread(shutdownServer()))
@@ -27,6 +33,8 @@ abstract class BaseApp(val port: Int) {
     }
 
     fun stop() = shutdownServer().invoke()
+
+    abstract fun controllers() : List<Handler>
 
     private fun shutdownServer() = {
         try {
