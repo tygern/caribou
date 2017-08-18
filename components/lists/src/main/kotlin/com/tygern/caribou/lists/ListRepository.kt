@@ -4,7 +4,7 @@ import java.util.UUID
 
 
 class ListRepository {
-    val messageLists = mutableMapOf<String, MessageListRecord>()
+    private val messageLists = mutableMapOf<String, MessageListRecord>()
 
     fun save(record: MessageListRecord) = record.persist()
 

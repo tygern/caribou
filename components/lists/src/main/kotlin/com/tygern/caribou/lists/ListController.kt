@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class ListController(
-    val mapper: ObjectMapper,
-    val listService: ListService
+    private val mapper: ObjectMapper,
+    private val listService: ListService
 ) : BaseController() {
     override fun handle(s: String, request: Request, httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse) {
         post("/lists", request, httpServletResponse) {

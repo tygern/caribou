@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class MessageController(
-    val mapper: ObjectMapper,
-    val messageRepository: MessageRepository
+    private val mapper: ObjectMapper,
+    private val messageRepository: MessageRepository
 ) : BaseController() {
     override fun handle(s: String, request: Request, httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse) {
         post("/messages", request, httpServletResponse) {

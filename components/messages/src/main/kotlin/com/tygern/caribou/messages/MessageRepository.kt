@@ -4,7 +4,7 @@ import java.util.*
 
 
 class MessageRepository {
-    val messages = mutableMapOf<String, Message>()
+    private val messages = mutableMapOf<String, Message>()
 
     fun create(messageToCreate: Message) =
         messageToCreate
