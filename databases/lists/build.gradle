@@ -1,0 +1,4 @@
+flyway {
+    url = "jdbc:mysql://localhost:3306/lists?user=tracker&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
+    locations = ["filesystem:databases/lists/migrations"]
+}

@@ -1,0 +1,22 @@
+plugins {
+    id "org.flywaydb.flyway" version "4.2.0" apply false
+}
+
+subprojects {
+    buildscript {
+        repositories {
+            mavenCentral()
+        }
+
+        dependencies {
+            classpath "mysql:mysql-connector-java:6.0.6"
+        }
+    }
+
+    apply plugin: "org.flywaydb.flyway"
+
+    flyway {
+        user = "caribou"
+        password = ""
+    }
+}

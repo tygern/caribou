@@ -5,5 +5,7 @@ include(
     ":components:messages",
     ":components:rest-support",
     ":components:test-support",
+    ":databases:lists",
+    ":databases:messages",
     ":integration-test"
 )
