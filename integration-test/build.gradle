@@ -1,8 +1,12 @@
 apply from: "$rootProject.rootDir/kotlin.gradle"
 
+compileTestKotlin {
+    kotlinOptions.freeCompilerArgs = ["-Xskip-runtime-version-check"]
+}
+
 dependencies {
-    compile project(":applications:list-server")
-    compile project(":applications:message-server")
+    testCompile project(":applications:list-server")
+    testCompile project(":applications:message-server")
 
     testCompile project(":components:test-support")
 }

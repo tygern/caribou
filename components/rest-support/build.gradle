@@ -8,5 +8,9 @@ dependencies {
     compile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
 
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    compile(group: "com.fasterxml.jackson.module", name: "jackson-module-kotlin", version: jacksonVersion) {
+        exclude(module: "kotlin-reflect")
+    }
 }
