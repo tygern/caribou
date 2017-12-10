@@ -1,0 +1,40 @@
+### Create message
+POST http://localhost:8081/messages
+Content-Type: application/json
+
+{
+    "value": "some message"
+}
+
+### Find message
+GET http://localhost:8081/messages/7e0b748f-ea9b-402a-9e3f-37b76cb68dfc
+
+### List messages
+GET http://localhost:8081/messages
+
+### Update message
+PUT http://localhost:8081/messages/7e0b748f-ea9b-402a-9e3f-37b76cb68dfc
+Content-Type: application/json
+
+{
+    "value": "some other message"
+}
+
+### Delete message
+DELETE http://localhost:8081/messages/7e0b748f-ea9b-402a-9e3f-37b76cb68dfc
+
+### Create message list
+POST http://localhost:8082/lists
+Content-Type: application/json
+
+{
+    "title": "Saturday"
+}
+
+### Find message list
+GET http://localhost:8082/lists/115effb2-8a2a-4138-bbba-25b2f95f7ba1
+
+### Add message to message list
+POST http://localhost:8082/lists/115effb2-8a2a-4138-bbba-25b2f95f7ba1/add/7e0b748f-ea9b-402a-9e3f-37b76cb68dfc
+
+###
