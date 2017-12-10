@@ -62,6 +62,15 @@ class MessageRepositoryTest : Test({
         assertThat(repo.list()).containsExactly(savedBye)
     }
 
+    test("delete and find") {
+        val message = repo.create(hi)
+        val messageId = message.id!!
+
+        repo.delete(messageId)
+
+        assertThat(repo.find(messageId)).isEqualTo(message.copy(deleted = true))
+    }
+
     test("update") {
         val savedHi = repo.create(hi)
 

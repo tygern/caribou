@@ -14,10 +14,14 @@ class MessageRepository {
 
     fun find(id: String) = messages[id]
 
-    fun list() = messages.values.toList()
+    fun list() = messages.values
+        .filter { !it.deleted }
+        .toList()
 
     fun delete(id: String) {
-        messages.remove(id)
+        find(id)?.let {
+            update(id, it.copy(deleted = true))
+        }
     }
 
     fun update(id: String, updates: Message) =

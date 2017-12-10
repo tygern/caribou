@@ -61,7 +61,7 @@ class MessageApiTest : Test({
         assertSuccess(response, statusCode = 200) {
             val readMessage = mapper.readValue(it.body, Message::class.java)
 
-            assertThat(readMessage).isEqualTo(readMessage)
+            assertThat(readMessage).isEqualTo(message)
         }
     }
 
@@ -82,7 +82,29 @@ class MessageApiTest : Test({
 
 
         assertSuccess(response, statusCode = 204)
-        assertError(RestClient().get("$messageServerUrl/messages/${message.id}"), statusCode = 404)
+
+        val fetchResponse = RestClient().get("$messageServerUrl/messages/${message.id}")
+        assertSuccess(fetchResponse, statusCode = 200) {
+            val readMessage = mapper.readValue(it.body, Message::class.java)
+
+            assertThat(readMessage).isEqualTo(message.copy(deleted = true))
+        }
+    }
+
+    test("delete not in list") {
+        val id = createMessage().id
+
+
+        val response = RestClient().delete("$messageServerUrl/messages/$id")
+
+
+        assertSuccess(response, statusCode = 204)
+        assertSuccess(RestClient().get("$messageServerUrl/messages"), statusCode = 200) {
+            val messageListType = mapper.typeFactory.constructCollectionType(List::class.java, Message::class.java)
+            val messageList: List<Message> = mapper.readValue(it.body, messageListType)
+
+            assertThat(messageList.map { it.id }).doesNotContain(id)
+        }
     }
 
     test("update") {

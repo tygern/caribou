@@ -56,6 +56,14 @@ class ListServiceTest : Test({
         )
     }
 
+    test("addMessage deleted") {
+        val savedTodo = service.create(todo)
+
+        val result = service.addMessage(savedTodo.id!!, "deleted")
+
+        assertThat(result).isNull()
+    }
+
     test("addMessage no list") {
         val result = service.addMessage("pickels", "i-exist")
 
