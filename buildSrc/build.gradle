@@ -1,0 +1,27 @@
+apply plugin: "kotlin"
+
+buildscript {
+    ext {
+        kotlinVersion = "1.2.0"
+    }
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+repositories {
+    jcenter()
+    maven {
+        url "https://repo.gradle.org/gradle/libs-releases-local/"
+    }
+}
+
+dependencies {
+    compile "org.gradle:gradle-kotlin-dsl:0.14.2"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+}

@@ -13,3 +13,9 @@ Run `./graldew run --parallel` to start all applications.
 The [requests.http](requests.http) file contains requests that
 can be used in local testing with IntelliJ 2017.3 and above
 (Ultimate Edition only, unfortunately).
+
+To view the dependencies between the project jarfiles:
+1. Install [Graphviz](http://www.graphviz.org/).
+1. Run `./gradlew dependenciesGraph`.
+1. Open `build/dependenciesGraph/graph.dot.png`.
+ 
